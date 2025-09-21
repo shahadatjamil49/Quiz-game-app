@@ -3,7 +3,7 @@ import streamlit as st
 # -------------------------
 # Quiz Questions Data
 # -------------------------
-questions = [
+quiz_data = [
     {
         "question": "What is the capital of France?",
         "options": ["Berlin", "Madrid", "Paris", "Rome"],
@@ -27,12 +27,15 @@ questions = [
 ]
 
 # -------------------------
-# Streamlit UI
+# Streamlit Page Config
 # -------------------------
 st.set_page_config(page_title="Quiz Game", page_icon="🎯", layout="centered")
-st.title("🎯 Python Quiz Game")
+st.title("🎯 Quiz Game App")
+st.write("Answer the questions and test your knowledge!")
 
-# Initialize session state
+# -------------------------
+# Session State
+# -------------------------
 if "score" not in st.session_state:
     st.session_state.score = 0
 if "q_index" not in st.session_state:
@@ -41,12 +44,11 @@ if "q_index" not in st.session_state:
 # -------------------------
 # Quiz Logic
 # -------------------------
-if st.session_state.q_index < len(questions):
-    q = questions[st.session_state.q_index]
+if st.session_state.q_index < len(quiz_data):
+    q = quiz_data[st.session_state.q_index]
 
     st.subheader(f"Q{st.session_state.q_index+1}: {q['question']}")
 
-    # Radio button for options
     choice = st.radio("Choose your answer:", q["options"], key=st.session_state.q_index)
 
     if st.button("Submit Answer"):
@@ -54,15 +56,15 @@ if st.session_state.q_index < len(questions):
             st.success("✅ Correct!")
             st.session_state.score += 1
         else:
-            st.error(f"❌ Wrong! Correct Answer: {q['answer']}")
+            st.error(f"❌ Wrong! Correct answer: {q['answer']}")
 
         st.session_state.q_index += 1
         st.experimental_rerun()
 
 else:
-    st.success(f"🎉 Quiz Finished! Your Score: {st.session_state.score}/{len(questions)}")
+    st.success(f"🎉 You finished the quiz! Final Score: {st.session_state.score}/{len(quiz_data)}")
 
-    if st.session_state.score == len(questions):
+    if st.session_state.score == len(quiz_data):
         st.balloons()
 
     if st.button("Restart Quiz"):
